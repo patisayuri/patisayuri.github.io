@@ -50,10 +50,15 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      z-index: 1;
     }
     .obra-wrapper {
       position: relative;
-      display: inline-block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 200px;
+      min-height: 200px;
     }
     .obra-img {
       max-height: 85vh;
@@ -62,12 +67,14 @@
       opacity: 0;
       transition: opacity 0.5s ease;
       display: block;
+      position: relative;
+      z-index: 2;
     }
     .obra-img.visivel { opacity: 1; }
     .obra-info {
       position: absolute;
       inset: 0;
-      background: rgba(247, 245, 240, 0.88);
+      background: rgba(247, 245, 240, 0.92);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -76,6 +83,7 @@
       transition: opacity 0.3s ease;
       padding: 2rem;
       text-align: center;
+      z-index: 3;
     }
     .obra-wrapper:hover .obra-info { opacity: 1; }
     .obra-info .titulo {
@@ -84,7 +92,7 @@
       font-size: 18px;
       font-weight: 400;
       color: #3D2B1A;
-      margin-bottom: 8px;
+      margin-bottom: 4px;
     }
     .obra-info .ano {
       font-family: 'DM Sans', sans-serif;
@@ -100,6 +108,7 @@
       color: #5c5b55;
       line-height: 1.6;
       max-width: 320px;
+      white-space: pre-line;
     }
     .btn {
       position: fixed;
@@ -128,9 +137,9 @@
   <div class="contador" id="contador">1 / 20</div>
 
   <div class="obra-container">
-    <div class="obra-wrapper">
+    <div class="obra-wrapper" id="obra-wrapper">
       <img class="obra-img" id="obra-img" src="">
-      <div class="obra-info" id="obra-info">
+      <div class="obra-info">
         <div class="titulo" id="info-titulo"></div>
         <div class="ano" id="info-ano"></div>
         <div class="descricao" id="info-descricao"></div>
@@ -152,4 +161,55 @@
       { src: '7_10_mochis.jpg', titulo: '10 Mochis', ano: '2025', descricao: 'Quilt em seda crua, enchimento de fibra de silicone, fios de algodão\n23cm × 2cm × 23cm' },
       { src: '8_sacola.jpg', titulo: 'Sacola', ano: '2026', descricao: 'Quilt bordado à máquina sobre sacola de algodão, linha de algodão, manta acrílica\n78cm × 60cm × 6cm' },
       { src: '9_casquinha_i.jpg', titulo: 'Casquinha I', ano: '2025', descricao: 'Casca de mexerica seca\n12cm × 8cm × 4,5cm' },
-      { src: '10_casquinha_vii.jpg', titul
+      { src: '10_casquinha_vii.jpg', titulo: 'Casquinha VII', ano: '2025', descricao: 'Casca de mexerica seca, linha de pipa\n13cm × 10cm × 3,5cm' },
+      { src: '11_casquinha_xi.jpg', titulo: 'Casquinha XI', ano: '2025', descricao: 'Óleo sobre casca de mexerica seca\n8cm × 6cm × 4cm' },
+      { src: '12_estudo_para_casca_de_mexerica.jpg', titulo: 'Estudo para Casca de Mexerica', ano: '2024', descricao: 'Linho sobre seda, alfinetes de metal\n58cm × 26cm' },
+      { src: '13_estudo_para_casca_em_textil_ii.jpg', titulo: 'Estudo para Casca de Mexerica II', ano: '2025', descricao: 'Algodão tingido bordado sobre seda tingida, linhas de algodão\n20cm × 27cm' },
+      { src: '14_estudo_para_casca_em_textil_iv.jpg', titulo: 'Estudo para Cascas de Mexerica IV', ano: '2025', descricao: 'Seda texturizada bordada sobre seda tingida, linhas de algodão\n26,5cm × 41cm' },
+      { src: '15_chororo.jpg', titulo: 'Chororô', ano: '2024', descricao: 'Seda crua, seda tingida, bordado, miçangas, linha de nylon, manta acrílica\n33cm × 4cm × 30cm' },
+      { src: '16_prova_do_real.jpg', titulo: 'Prova do Real', ano: '2026', descricao: 'Mãos em algodão tingido, bordado e manta acrílica, turmalinas negras sobre base macia de seda tingida e manta acrílica\n19cm × 19cm × 19cm' },
+      { src: '17_amor_furioso.jpg', titulo: 'Amor Furioso', ano: '2017', descricao: 'Katazome (tingimento com pasta de arroz), índigo fresco sobre seda\n40cm × 40cm' },
+      { src: '18_minha_pedra_macia.jpg', titulo: 'Minha Pedra Macia', ano: '2025', descricao: 'Óleo, bastão à óleo e medium de cera de abelha sobre tela\n10cm × 15cm' },
+      { src: '19_mochi.jpg', titulo: 'Mochi', ano: '2026', descricao: 'Óleo e bastão de óleo sobre tela\n20cm × 25cm' },
+      { src: '20_13_mochis.jpg', titulo: '13 Mochis', ano: '2025', descricao: 'Óleo e bastão de óleo sobre tela\n22cm × 16cm' },
+    ];
+
+    let atual = 0;
+
+    function mostrar(index) {
+      const img = document.getElementById('obra-img');
+      const contador = document.getElementById('contador');
+      const infoTitulo = document.getElementById('info-titulo');
+      const infoAno = document.getElementById('info-ano');
+      const infoDescricao = document.getElementById('info-descricao');
+
+      img.classList.remove('visivel');
+
+      setTimeout(() => {
+        const obra = obras[index];
+        img.src = obra.src;
+        infoTitulo.textContent = obra.titulo;
+        infoAno.textContent = obra.ano;
+        infoDescricao.textContent = obra.descricao;
+        contador.textContent = (index + 1) + ' / ' + obras.length;
+        img.onload = () => {
+          img.classList.add('visivel');
+        };
+      }, 300);
+    }
+
+    function mudar(direcao) {
+      atual = (atual + direcao + obras.length) % obras.length;
+      mostrar(atual);
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') mudar(1);
+      if (e.key === 'ArrowLeft') mudar(-1);
+    });
+
+    mostrar(0);
+  </script>
+
+</body>
+</html>
