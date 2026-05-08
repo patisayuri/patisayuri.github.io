@@ -4,14 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>obras — Pati Sayuri</title>
-  <link href="https://fonts.googleapis.com/css2?family=Tilt+Warp&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Tilt+Warp&family=DM+Sans:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Tilt Warp', cursive;
       height: 100vh;
       overflow: hidden;
-      /* Mantemos o fundo aqui apenas como garantia, mas a imagem da obra cobrirá o centro */
       background-image: url('obra_00_vazio2.jpg');
       background-size: cover;
       background-position: center;
@@ -43,6 +42,7 @@
       color: #3D2B1A;
       opacity: 0.6;
       z-index: 10;
+      font-family: 'DM Sans', sans-serif;
     }
     .obra-container {
       position: fixed;
@@ -51,27 +51,66 @@
       align-items: center;
       justify-content: center;
     }
+    .obra-wrapper {
+      position: relative;
+      display: inline-block;
+    }
     .obra-img {
-      max-height: 85vh; /* Aumentei um pouco para valorizar sua edição */
-      max-width: 85vw;
+      max-height: 85vh;
+      max-width: 75vw;
       object-fit: contain;
       opacity: 0;
       transition: opacity 0.5s ease;
-      /* REMOVIDO: mix-blend-mode e filter para não distorcer sua edição */
+      display: block;
     }
     .obra-img.visivel { opacity: 1; }
-    
-    /* Botões e Legendas mantidos conforme seu padrão */
+    .obra-info {
+      position: absolute;
+      inset: 0;
+      background: rgba(247, 245, 240, 0.88);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      padding: 2rem;
+      text-align: center;
+    }
+    .obra-wrapper:hover .obra-info { opacity: 1; }
+    .obra-info .titulo {
+      font-family: 'DM Sans', sans-serif;
+      font-style: italic;
+      font-size: 18px;
+      font-weight: 400;
+      color: #3D2B1A;
+      margin-bottom: 8px;
+    }
+    .obra-info .ano {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 18px;
+      font-weight: 300;
+      color: #3D2B1A;
+      margin-bottom: 12px;
+    }
+    .obra-info .descricao {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 300;
+      color: #5c5b55;
+      line-height: 1.6;
+      max-width: 320px;
+    }
     .btn {
       position: fixed;
       top: 50%;
       transform: translateY(-50%);
       background: none;
       border: none;
-      font-size: 32px;
+      font-size: 28px;
       cursor: pointer;
-      color: #3D2B1A;
-      opacity: 0.4;
+      color: #e57fbd;
+      opacity: 0.5;
       transition: opacity 0.2s;
       font-family: 'Tilt Warp', cursive;
       z-index: 10;
@@ -80,19 +119,6 @@
     .btn:hover { opacity: 1; }
     .btn-prev { left: 16px; }
     .btn-next { right: 16px; }
-    .obra-titulo {
-      position: fixed;
-      bottom: 40px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 14px;
-      color: #3D2B1A;
-      opacity: 0;
-      transition: opacity 0.5s ease;
-      text-align: center;
-      white-space: nowrap;
-    }
-    .obra-titulo.visivel { opacity: 0.7; }
   </style>
 </head>
 <body>
@@ -102,72 +128,28 @@
   <div class="contador" id="contador">1 / 20</div>
 
   <div class="obra-container">
-    <img class="obra-img" id="obra-img" src="">
+    <div class="obra-wrapper">
+      <img class="obra-img" id="obra-img" src="">
+      <div class="obra-info" id="obra-info">
+        <div class="titulo" id="info-titulo"></div>
+        <div class="ano" id="info-ano"></div>
+        <div class="descricao" id="info-descricao"></div>
+      </div>
+    </div>
   </div>
-
-  <div class="obra-titulo" id="obra-titulo"></div>
 
   <button class="btn btn-prev" onclick="mudar(-1)">←</button>
   <button class="btn btn-next" onclick="mudar(1)">→</button>
 
   <script>
     const obras = [
-      { src: '1_paisagem_macia.jpg', titulo: 'Paisagem Macia', mostrarTitulo: true },
-      { src: '2_paisagem_crua.jpg', titulo: 'Paisagem Crua', mostrarTitulo: false },
-      { src: '3_senhora_sol.jpg', titulo: 'Senhora Sol! Não Desapareça!', mostrarTitulo: true },
-      { src: '4_fortuna.jpg', titulo: 'Fortuna', mostrarTitulo: false },
-      { src: '5_5_amarras.jpg', titulo: '5 Amarras', mostrarTitulo: false },
-      { src: '6_mixirica_com_mochi.jpg', titulo: 'Mixirica com Mochi', mostrarTitulo: true },
-      { src: '7_10_mochis.jpg', titulo: '10 Mochis', mostrarTitulo: false },
-      { src: '8_sacola.jpg', titulo: 'Sacola (Quilt itinerante)', mostrarTitulo: true },
-      { src: '9_casquinha_i.jpg', titulo: 'Casquinha I', mostrarTitulo: false },
-      { src: '10_casquinha_vii.jpg', titulo: 'Casquinha VII', mostrarTitulo: false },
-      { src: '11_casquinha_xi.jpg', titulo: 'Casquinha XI', mostrarTitulo: false },
-      { src: '12_estudo_para_casca_de_mexerica.jpg', titulo: 'Estudo para Casca de Mexerica', mostrarTitulo: false },
-      { src: '13_estudo_para_casca_em_textil_ii.jpg', titulo: 'Estudo para Casca em Têxtil II', mostrarTitulo: false },
-      { src: '14_estudo_para_casca_em_textil_iv.jpg', titulo: 'Estudo para Casca em Têxtil IV', mostrarTitulo: false },
-      { src: '15_chororo.jpg', titulo: 'Chororo', mostrarTitulo: false },
-      { src: '16_prova_do_real.jpg', titulo: 'Prova do Real', mostrarTitulo: false },
-      { src: '17_amor_furioso.jpg', titulo: 'Amor Furioso', mostrarTitulo: false },
-      { src: '18_minha_pedra_macia.jpg', titulo: 'Minha Pedra Macia', mostrarTitulo: false },
-      { src: '19_mochi.jpg', titulo: 'Mochi', mostrarTitulo: false },
-      { src: '20_13_mochis.jpg', titulo: '13 Mochis', mostrarTitulo: false },
-    ];
-
-    let atual = 0;
-
-    function mostrar(index) {
-      const img = document.getElementById('obra-img');
-      const titulo = document.getElementById('obra-titulo');
-      const contador = document.getElementById('contador');
-
-      img.classList.remove('visivel');
-      titulo.classList.remove('visivel');
-
-      setTimeout(() => {
-        img.src = obras[index].src;
-        titulo.textContent = obras[index].mostrarTitulo ? obras[index].titulo : "";
-        contador.textContent = (index + 1) + ' / ' + obras.length;
-        img.onload = () => {
-          img.classList.add('visivel');
-          if(obras[index].mostrarTitulo) {
-            titulo.classList.add('visivel');
-          }
-        };
-      }, 300);
-    }
-
-    function mudar(direcao) {
-      atual = (atual + direcao + obras.length) % obras.length;
-      mostrar(atual);
-    }
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight') mudar(1);
-      if (e.key === 'ArrowLeft') mudar(-1);
-    });
-
-    mostrar(0);
-  </script>
-</body>
-</html>
+      { src: '1_paisagem_macia.jpg', titulo: 'Paisagem Macia', ano: '2024', descricao: 'Escultura macia. Seda tingida, fios de algodão, fios de poliéster, enchimento de fibra de silicone\n10cm × 100cm × 100cm' },
+      { src: '2_paisagem_crua.jpg', titulo: 'Paisagem Crua', ano: '2018–2026', descricao: 'Mokume Shibori sem tingir, tecido misto de algodão com linho, linha de algodão\n78cm × 60cm × 6cm' },
+      { src: '3_senhora_sol.jpg', titulo: 'Senhora Sol! Não Desapareça!', ano: '2025', descricao: 'Tecido de seda tingido, linha de algodão, linha de poliéster, enchimento de fibra siliconada\n70cm × 25cm × 60cm' },
+      { src: '4_fortuna.jpg', titulo: 'Estudo em Rosa, Vermelho e Amarelo (Fortuna)', ano: '2026', descricao: 'Uchikabi (papel amarelo que representa dinheiro do "outro mundo" em Okinawa) sobre seda tingida\n27,5cm × 38cm' },
+      { src: '5_5_amarras.jpg', titulo: '5 Amarras (Rosa e Laranja)', ano: '2025', descricao: 'Seda tingida, seda crua, fios de algodão\n63cm × 2cm × 42cm' },
+      { src: '6_mixirica_com_mochi.jpg', titulo: 'Mixirica com Mochi', ano: '2023', descricao: 'Seda crua, seda tingida, algodão, linho, fios de algodão, arroz glutinoso\n12cm × 12cm × 13cm' },
+      { src: '7_10_mochis.jpg', titulo: '10 Mochis', ano: '2025', descricao: 'Quilt em seda crua, enchimento de fibra de silicone, fios de algodão\n23cm × 2cm × 23cm' },
+      { src: '8_sacola.jpg', titulo: 'Sacola', ano: '2026', descricao: 'Quilt bordado à máquina sobre sacola de algodão, linha de algodão, manta acrílica\n78cm × 60cm × 6cm' },
+      { src: '9_casquinha_i.jpg', titulo: 'Casquinha I', ano: '2025', descricao: 'Casca de mexerica seca\n12cm × 8cm × 4,5cm' },
+      { src: '10_casquinha_vii.jpg', titul
