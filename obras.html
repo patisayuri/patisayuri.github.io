@@ -11,6 +11,7 @@
       font-family: 'Tilt Warp', cursive;
       height: 100vh;
       overflow: hidden;
+      /* Fundo com a parede do seu ateliê */
       background-image: url('obra_00_vazio2.jpg');
       background-size: cover;
       background-position: center;
@@ -56,6 +57,11 @@
       object-fit: contain;
       opacity: 0;
       transition: opacity 0.5s ease;
+      
+      /* EFEITO DE FUSÃO: Faz o branco da foto sumir e mantém a sombra real */
+      mix-blend-mode: multiply; 
+      /* Ajuste fino para limpar o fundo das fotos originais */
+      filter: brightness(1.08) contrast(1.1);
     }
     .obra-img.visivel { opacity: 1; }
     .btn {
@@ -108,26 +114,26 @@
 
   <script>
     const obras = [
-      { src: '1_paisagem_macia.jpg', titulo: 'Paisagem Macia' },
-      { src: '2_paisagem_crua.jpg', titulo: 'Paisagem Crua' },
-      { src: '3_senhora_sol.jpg', titulo: 'Senhora Sol' },
-      { src: '4_fortuna.jpg', titulo: 'Fortuna' },
-      { src: '5_5_amarras.jpg', titulo: '5 Amarras' },
-      { src: '6_mixirica_com_mochi.jpg', titulo: 'Mixirica com Mochi' },
-      { src: '7_10_mochis.jpg', titulo: '10 Mochis' },
-      { src: '8_sacola.jpg', titulo: 'Sacola' },
-      { src: '9_casquinha_i.jpg', titulo: 'Casquinha I' },
-      { src: '10_casquinha_vii.jpg', titulo: 'Casquinha VII' },
-      { src: '11_casquinha_xi.jpg', titulo: 'Casquinha XI' },
-      { src: '12_estudo_para_casca_de_mexerica.jpg', titulo: 'Estudo para Casca de Mexerica' },
-      { src: '13_estudo_para_casca_em_textil_ii.jpg', titulo: 'Estudo para Casca em Têxtil II' },
-      { src: '14_estudo_para_casca_em_textil_iv.jpg', titulo: 'Estudo para Casca em Têxtil IV' },
-      { src: '15_chororo.jpg', titulo: 'Chororo' },
-      { src: '16_prova_do_real.jpg', titulo: 'Prova do Real' },
-      { src: '17_amor_furioso.jpg', titulo: 'Amor Furioso' },
-      { src: '18_minha_pedra_macia.jpg', titulo: 'Minha Pedra Macia' },
-      { src: '19_mochi.jpg', titulo: 'Mochi' },
-      { src: '20_13_mochis.jpg', titulo: '13 Mochis' },
+      { src: '1_paisagem_macia.jpg', titulo: 'Paisagem Macia', mostrarTitulo: true },
+      { src: '2_paisagem_crua.jpg', titulo: 'Paisagem Crua', mostrarTitulo: false },
+      { src: '3_senhora_sol.jpg', titulo: 'Senhora Sol! Não Desapareça!', mostrarTitulo: true },
+      { src: '4_fortuna.jpg', titulo: 'Fortuna', mostrarTitulo: false },
+      { src: '5_5_amarras.jpg', titulo: '5 Amarras', mostrarTitulo: false },
+      { src: '6_mixirica_com_mochi.jpg', titulo: 'Mixirica com Mochi', mostrarTitulo: true },
+      { src: '7_10_mochis.jpg', titulo: '10 Mochis', mostrarTitulo: false },
+      { src: '8_sacola.jpg', titulo: 'Sacola (Quilt itinerante)', mostrarTitulo: true },
+      { src: '9_casquinha_i.jpg', titulo: 'Casquinha I', mostrarTitulo: false },
+      { src: '10_casquinha_vii.jpg', titulo: 'Casquinha VII', mostrarTitulo: false },
+      { src: '11_casquinha_xi.jpg', titulo: 'Casquinha XI', mostrarTitulo: false },
+      { src: '12_estudo_para_casca_de_mexerica.jpg', titulo: 'Estudo para Casca de Mexerica', mostrarTitulo: false },
+      { src: '13_estudo_para_casca_em_textil_ii.jpg', titulo: 'Estudo para Casca em Têxtil II', mostrarTitulo: false },
+      { src: '14_estudo_para_casca_em_textil_iv.jpg', titulo: 'Estudo para Casca em Têxtil IV', mostrarTitulo: false },
+      { src: '15_chororo.jpg', titulo: 'Chororo', mostrarTitulo: false },
+      { src: '16_prova_do_real.jpg', titulo: 'Prova do Real', mostrarTitulo: false },
+      { src: '17_amor_furioso.jpg', titulo: 'Amor Furioso', mostrarTitulo: false },
+      { src: '18_minha_pedra_macia.jpg', titulo: 'Minha Pedra Macia', mostrarTitulo: false },
+      { src: '19_mochi.jpg', titulo: 'Mochi', mostrarTitulo: false },
+      { src: '20_13_mochis.jpg', titulo: '13 Mochis', mostrarTitulo: false },
     ];
 
     let atual = 0;
@@ -142,11 +148,14 @@
 
       setTimeout(() => {
         img.src = obras[index].src;
-        titulo.textContent = obras[index].titulo;
+        // Só exibe o texto se mostrarTitulo for verdadeiro
+        titulo.textContent = obras[index].mostrarTitulo ? obras[index].titulo : "";
         contador.textContent = (index + 1) + ' / ' + obras.length;
         img.onload = () => {
           img.classList.add('visivel');
-          titulo.classList.add('visivel');
+          if(obras[index].mostrarTitulo) {
+            titulo.classList.add('visivel');
+          }
         };
       }, 300);
     }
@@ -156,7 +165,6 @@
       mostrar(atual);
     }
 
-    // navegação pelo teclado
     document.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowRight') mudar(1);
       if (e.key === 'ArrowLeft') mudar(-1);
