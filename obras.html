@@ -11,7 +11,7 @@
       font-family: 'Tilt Warp', cursive;
       height: 100vh;
       overflow: hidden;
-      /* Fundo com a parede do seu ateliê */
+      /* Mantemos o fundo aqui apenas como garantia, mas a imagem da obra cobrirá o centro */
       background-image: url('obra_00_vazio2.jpg');
       background-size: cover;
       background-position: center;
@@ -52,18 +52,16 @@
       justify-content: center;
     }
     .obra-img {
-      max-height: 75vh;
-      max-width: 70vw;
+      max-height: 85vh; /* Aumentei um pouco para valorizar sua edição */
+      max-width: 85vw;
       object-fit: contain;
       opacity: 0;
       transition: opacity 0.5s ease;
-      
-      /* EFEITO DE FUSÃO: Faz o branco da foto sumir e mantém a sombra real */
-      mix-blend-mode: multiply; 
-      /* Ajuste fino para limpar o fundo das fotos originais */
-      filter: brightness(1.08) contrast(1.1);
+      /* REMOVIDO: mix-blend-mode e filter para não distorcer sua edição */
     }
     .obra-img.visivel { opacity: 1; }
+    
+    /* Botões e Legendas mantidos conforme seu padrão */
     .btn {
       position: fixed;
       top: 50%;
@@ -148,7 +146,6 @@
 
       setTimeout(() => {
         img.src = obras[index].src;
-        // Só exibe o texto se mostrarTitulo for verdadeiro
         titulo.textContent = obras[index].mostrarTitulo ? obras[index].titulo : "";
         contador.textContent = (index + 1) + ' / ' + obras.length;
         img.onload = () => {
@@ -172,6 +169,5 @@
 
     mostrar(0);
   </script>
-
 </body>
 </html>
