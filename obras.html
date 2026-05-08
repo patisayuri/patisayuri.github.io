@@ -8,135 +8,161 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      background-color: #F7F5F0;
       font-family: 'Tilt Warp', cursive;
-      color: #3D2B1A;
-    }
-    header {
-      padding: 32px 40px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      height: 100vh;
+      overflow: hidden;
+      background-image: url('obra_00_vazio2.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
     }
     .nome {
+      position: fixed;
+      top: 32px;
+      left: 40px;
       font-size: 22px;
       color: #000;
       text-decoration: none;
+      z-index: 10;
     }
-    .secao-titulo {
-      font-size: 28px;
-      margin-bottom: 24px;
-      padding: 0 40px;
+    .secao-label {
+      position: fixed;
+      top: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 22px;
+      color: #e57fbd;
+      z-index: 10;
     }
-    .obras-titulo { color: #e57fbd; }
-    .performances-titulo { color: #a7db8a; }
-    .grade {
-      padding: 0 40px 60px;
-      columns: 3;
-      column-gap: 12px;
+    .contador {
+      position: fixed;
+      top: 32px;
+      right: 40px;
+      font-size: 14px;
+      color: #3D2B1A;
+      opacity: 0.6;
+      z-index: 10;
     }
-    .grade img {
-      width: 100%;
-      display: block;
-      margin-bottom: 12px;
-      cursor: pointer;
-      transition: opacity 0.2s;
-    }
-    .grade img:hover { opacity: 0.85; }
-    .separador {
-      height: 1px;
-      background: #D8CFC4;
-      margin: 48px 40px;
-    }
-    /* lightbox */
-    .lightbox {
-      display: none;
+    .obra-container {
       position: fixed;
       inset: 0;
-      background: rgba(247,245,240,0.95);
-      z-index: 100;
+      display: flex;
       align-items: center;
       justify-content: center;
-      flex-direction: column;
     }
-    .lightbox.ativo { display: flex; }
-    .lightbox img {
-      max-height: 80vh;
-      max-width: 90vw;
+    .obra-img {
+      max-height: 75vh;
+      max-width: 70vw;
       object-fit: contain;
+      opacity: 0;
+      transition: opacity 0.5s ease;
     }
-    .lightbox-fechar {
-      position: absolute;
-      top: 24px;
-      right: 32px;
-      font-size: 28px;
+    .obra-img.visivel { opacity: 1; }
+    .btn {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      font-size: 32px;
       cursor: pointer;
       color: #3D2B1A;
-      text-decoration: none;
+      opacity: 0.4;
+      transition: opacity 0.2s;
+      font-family: 'Tilt Warp', cursive;
+      z-index: 10;
+      padding: 20px;
     }
-    @media (max-width: 768px) {
-      .grade { columns: 2; }
+    .btn:hover { opacity: 1; }
+    .btn-prev { left: 16px; }
+    .btn-next { right: 16px; }
+    .obra-titulo {
+      position: fixed;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 14px;
+      color: #3D2B1A;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      text-align: center;
+      white-space: nowrap;
     }
-    @media (max-width: 480px) {
-      .grade { columns: 1; padding: 0 20px 40px; }
-      header { padding: 24px 20px; }
-      .secao-titulo { padding: 0 20px; }
-    }
+    .obra-titulo.visivel { opacity: 0.7; }
   </style>
 </head>
 <body>
 
-  <header>
-    <a href="index.html" class="nome">pati sayuri</a>
-  </header>
+  <a href="index.html" class="nome">pati sayuri</a>
+  <div class="secao-label">obras</div>
+  <div class="contador" id="contador">1 / 20</div>
 
-  <div class="secao-titulo obras-titulo">obras</div>
-  <div class="grade" id="grade-obras">
-    <img src="1_paisagem_macia.jpg" onclick="abrirLightbox(this)">
-    <img src="2_paisagem_crua.jpg" onclick="abrirLightbox(this)">
-    <img src="3_senhora_sol.jpg" onclick="abrirLightbox(this)">
-    <img src="4_fortuna.jpg" onclick="abrirLightbox(this)">
-    <img src="5_5_amarras.jpg" onclick="abrirLightbox(this)">
-    <img src="6_mixirica_com_mochi.jpg" onclick="abrirLightbox(this)">
-    <img src="7_10_mochis.jpg" onclick="abrirLightbox(this)">
-    <img src="8_sacola.jpg" onclick="abrirLightbox(this)">
-    <img src="9_casquinha_i.jpg" onclick="abrirLightbox(this)">
-    <img src="10_casquinha_vii.jpg" onclick="abrirLightbox(this)">
-    <img src="11_casquinha_xi.jpg" onclick="abrirLightbox(this)">
-    <img src="12_estudo_para_casca_de_mexerica.jpg" onclick="abrirLightbox(this)">
-    <img src="13_estudo_para_casca_em_textil_ii.jpg" onclick="abrirLightbox(this)">
-    <img src="14_estudo_para_casca_em_textil_iv.jpg" onclick="abrirLightbox(this)">
-    <img src="15_chororo.jpg" onclick="abrirLightbox(this)">
-    <img src="16_prova_do_real.jpg" onclick="abrirLightbox(this)">
-    <img src="17_amor_furioso.jpg" onclick="abrirLightbox(this)">
-    <img src="18_minha_pedra_macia.jpg" onclick="abrirLightbox(this)">
-    <img src="19_mochi.jpg" onclick="abrirLightbox(this)">
-    <img src="20_13_mochis.jpg" onclick="abrirLightbox(this)">
+  <div class="obra-container">
+    <img class="obra-img" id="obra-img" src="">
   </div>
 
-  <div class="separador"></div>
+  <div class="obra-titulo" id="obra-titulo"></div>
 
-  <div class="secao-titulo performances-titulo">performances</div>
-  <div class="grade" id="grade-performances">
-    <!-- adiciona fotos de performances aqui depois -->
-  </div>
-
-  <div class="lightbox" id="lightbox">
-    <a class="lightbox-fechar" onclick="fecharLightbox()">✕</a>
-    <img id="lightbox-img" src="">
-  </div>
+  <button class="btn btn-prev" onclick="mudar(-1)">←</button>
+  <button class="btn btn-next" onclick="mudar(1)">→</button>
 
   <script>
-    function abrirLightbox(img) {
-      document.getElementById('lightbox-img').src = img.src;
-      document.getElementById('lightbox').classList.add('ativo');
+    const obras = [
+      { src: '1_paisagem_macia.jpg', titulo: 'Paisagem Macia' },
+      { src: '2_paisagem_crua.jpg', titulo: 'Paisagem Crua' },
+      { src: '3_senhora_sol.jpg', titulo: 'Senhora Sol' },
+      { src: '4_fortuna.jpg', titulo: 'Fortuna' },
+      { src: '5_5_amarras.jpg', titulo: '5 Amarras' },
+      { src: '6_mixirica_com_mochi.jpg', titulo: 'Mixirica com Mochi' },
+      { src: '7_10_mochis.jpg', titulo: '10 Mochis' },
+      { src: '8_sacola.jpg', titulo: 'Sacola' },
+      { src: '9_casquinha_i.jpg', titulo: 'Casquinha I' },
+      { src: '10_casquinha_vii.jpg', titulo: 'Casquinha VII' },
+      { src: '11_casquinha_xi.jpg', titulo: 'Casquinha XI' },
+      { src: '12_estudo_para_casca_de_mexerica.jpg', titulo: 'Estudo para Casca de Mexerica' },
+      { src: '13_estudo_para_casca_em_textil_ii.jpg', titulo: 'Estudo para Casca em Têxtil II' },
+      { src: '14_estudo_para_casca_em_textil_iv.jpg', titulo: 'Estudo para Casca em Têxtil IV' },
+      { src: '15_chororo.jpg', titulo: 'Chororo' },
+      { src: '16_prova_do_real.jpg', titulo: 'Prova do Real' },
+      { src: '17_amor_furioso.jpg', titulo: 'Amor Furioso' },
+      { src: '18_minha_pedra_macia.jpg', titulo: 'Minha Pedra Macia' },
+      { src: '19_mochi.jpg', titulo: 'Mochi' },
+      { src: '20_13_mochis.jpg', titulo: '13 Mochis' },
+    ];
+
+    let atual = 0;
+
+    function mostrar(index) {
+      const img = document.getElementById('obra-img');
+      const titulo = document.getElementById('obra-titulo');
+      const contador = document.getElementById('contador');
+
+      img.classList.remove('visivel');
+      titulo.classList.remove('visivel');
+
+      setTimeout(() => {
+        img.src = obras[index].src;
+        titulo.textContent = obras[index].titulo;
+        contador.textContent = (index + 1) + ' / ' + obras.length;
+        img.onload = () => {
+          img.classList.add('visivel');
+          titulo.classList.add('visivel');
+        };
+      }, 300);
     }
-    function fecharLightbox() {
-      document.getElementById('lightbox').classList.remove('ativo');
+
+    function mudar(direcao) {
+      atual = (atual + direcao + obras.length) % obras.length;
+      mostrar(atual);
     }
-    document.getElementById('lightbox').addEventListener('click', function(e) {
-      if (e.target === this) fecharLightbox();
+
+    // navegação pelo teclado
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') mudar(1);
+      if (e.key === 'ArrowLeft') mudar(-1);
     });
+
+    mostrar(0);
   </script>
 
 </body>
